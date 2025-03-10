@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
+import tr.com.kaanhangunay.examples.aop.QueueExceptionHandlerAop;
 import tr.com.kaanhangunay.examples.service.MessageSenderService;
 import tr.com.kaanhangunay.examples.service.QueueListenerStarter;
 import tr.com.kaanhangunay.examples.service.QueueMessageListener;
@@ -30,13 +31,23 @@ public class AmqpConfiguration {
   public SimpleMessageListenerContainer queueMessageListener(
       ConnectionFactory connectionFactory,
       Environment environment,
-      ApplicationEventPublisher applicationEventPublisher) {
+      ApplicationEventPublisher applicationEventPublisher,
+      MessageSenderService messageSenderService) {
     String appName = environment.getProperty("spring.application.name");
     SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
     container.setConnectionFactory(connectionFactory);
     container.setQueueNames(appName);
-    container.setMessageListener(new QueueMessageListener(applicationEventPublisher));
+    container.setMessageListener(
+        new QueueMessageListener(appName, messageSenderService, applicationEventPublisher));
     return container;
+  }
+
+  @Bean
+  @DependsOn("queueRegisterer")
+  public QueueExceptionHandlerAop queueExceptionHandlerAop(
+      Environment environment, MessageSenderService messageSenderService) {
+    String appName = environment.getProperty("spring.application.name");
+    return new QueueExceptionHandlerAop(messageSenderService, appName);
   }
 
   @Bean

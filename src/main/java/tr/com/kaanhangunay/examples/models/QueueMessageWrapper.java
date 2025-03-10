@@ -8,9 +8,9 @@ public class QueueMessageWrapper<T extends BaseQueueMessage> {
   private QueueMessageType type;
   private T body;
   private String source;
+  private Boolean isRetry = false;
 
-  public QueueMessageWrapper() {
-  }
+  public QueueMessageWrapper() {}
 
   public QueueMessageWrapper(QueueMessageType type, T body) {
     this.type = type;
@@ -47,5 +47,13 @@ public class QueueMessageWrapper<T extends BaseQueueMessage> {
 
   public void setSource(String source) {
     this.source = source;
+  }
+
+  public Boolean isRetry() {
+    return isRetry;
+  }
+
+  public void setRetry(Boolean retry) {
+    isRetry = retry;
   }
 }

@@ -1,10 +1,12 @@
 package tr.com.kaanhangunay.examples.models;
 
-import tr.com.kaanhangunay.examples.messages.BaseQueueMessage;
-import tr.com.kaanhangunay.examples.messages.ExampleMessage;
+import tr.com.kaanhangunay.examples.messages.*;
 
 public enum QueueMessageType {
-  EXAMPLE_MESSAGE(ExampleMessage.class);
+  EXAMPLE_MESSAGE(ExampleMessage.class),
+  QUEUE_EXCEPTION_MESSAGE(QueueExceptionMessage.class),
+  QUEUE_EXCEPTION_RESOLVED_MESSAGE(QueueExceptionResolvedMessage.class),
+  QUEUE_NOT_READABLE_MESSAGE(QueueNotReadableExceptionMessage.class);
 
   private final Class<? extends BaseQueueMessage> messageClass;
 

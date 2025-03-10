@@ -23,4 +23,11 @@ public class MessageSenderService {
       rabbitTemplate.convertAndSend(destination.getServiceName(), message);
     }
   }
+
+  public <T extends BaseQueueMessage> void to(
+      QueueMessageWrapper<T> message, String... destinations) {
+    for (String destination : destinations) {
+      rabbitTemplate.convertAndSend(destination, message);
+    }
+  }
 }
